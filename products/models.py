@@ -2,11 +2,14 @@ from django.db import models
 
 
 class Product(models.Model):
-    name = models.SlugField(max_length=100)
-    price = models.FloatField()
+    name = models.CharField(max_length=100)
+    price = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'name:{self.name} | price: {self.price}'
+        return self.name
 
 
 # class Category(models.Model):
