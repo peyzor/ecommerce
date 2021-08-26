@@ -3,18 +3,19 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def crawl_product(url):
+def crawl_product(url, page_number_limit):
+    # TODO: Add docstring to explain `page_number_limit` meaning
     data = []
 
-    page_no = 1
+    page_number = 1
     crawl = True
     while crawl:
-        response = requests.get(url.format(page_no=page_no))
+        response = requests.get(url.format(page_number=page_number))
         crawl = response.ok
 
         soup = BeautifulSoup(response.text, features='html.parser')
 
-        products = soup.select(
+        names = soup.select(
             '#inspire > div > div:nth-child(2) > div.lg\:tw-bg-gray-100 > div > div > main > div.tw-grid.tw-grid-cols-1.tw-mt-4.tw-gap-y-3.sm\:tw-grid-cols-2.sm\:tw-gap-3.lg\:tw-gap-4.lg\:tw-grid-cols-3.xl\:tw-grid-cols-4 > a > section > div > h4 > span'
         )
 
@@ -28,11 +29,14 @@ def crawl_product(url):
 
         all_prices = [*prices, *discount_prices]
 
-        for product, price in zip(products, all_prices):
-            data.append((product.text.strip(), price.text.strip()))
+        for name, price in zip(names, all_prices):
+            data.append({
+                'name': name.text.strip(),
+                'price': int(price.text.strip().replace(',', ''))
+            })
 
-        page_no += 1
-        if page_no > 5:
+        page_number += 1
+        if page_number > page_number_limit:
             crawl = False
 
     return data

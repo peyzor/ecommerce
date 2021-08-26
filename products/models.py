@@ -9,5 +9,5 @@ class Product(models.Model):
         return f'name:{self.name} | price: {self.price}'
 
 
-class Category(models.Model):
-    pass
+# class Category(models.Model):
+#     pass
