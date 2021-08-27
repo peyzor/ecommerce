@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product
+from .models import Product, Category
 
 
 @admin.action(description='Make selected as not available')
@@ -14,3 +14,6 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     date_hierarchy = 'created_at'
     actions = (make_not_available, )
+
+
+admin.site.register(Category)
