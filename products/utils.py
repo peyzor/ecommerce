@@ -4,7 +4,21 @@ from bs4 import BeautifulSoup
 
 
 def crawl_product(url, page_number_limit):
-    # TODO: Add docstring to explain `page_number_limit` meaning
+    """
+    gather data from the specified url page by page
+    from page 1 upto `page_number_limit`
+
+    Parameters
+    ----------
+    url : str
+    page_number_limit : int
+
+    Returns
+    -------
+    List[dict]
+        data gathered from each product is added to the
+        `data` list
+    """
     data = []
 
     page_number = 1
