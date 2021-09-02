@@ -1,3 +1,7 @@
 {% for category in categories %}
-<h4>{{ category }}</h4>
+<ul>
+    <li>
+        <a href="{{ category.get_absolute_url }}">{{ category }}</a>
+    </li>
+</ul>
 {% endfor %}

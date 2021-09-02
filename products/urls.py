@@ -10,7 +10,7 @@ urlpatterns = [
     path('<str:category>/product-list/',
          views.ProductListView.as_view(),
          name='product_list'),
-    path('product-detail/<int:product_id>',
+    path('product-detail/<int:product_id>/',
          views.ProductDetailView.as_view(),
          name='product_detail'),
 ]
