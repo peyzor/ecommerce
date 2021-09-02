@@ -9,8 +9,8 @@ urlpatterns = [
          name='category_list'),
     path('<str:category>/product-list/',
          views.ProductListView.as_view(),
-         name='product-list'),
+         name='product_list'),
     path('product-detail/<int:product_id>',
          views.ProductDetailView.as_view(),
-         name='product-detail'),
+         name='product_detail'),
 ]
