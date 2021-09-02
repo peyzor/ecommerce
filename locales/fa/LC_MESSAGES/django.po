@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-02 15:15+0430\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: products/models.py:7 products/models.py:30
+msgid "name"
+msgstr "اسم"
+
+#: products/models.py:8
+msgid "price"
+msgstr "قیمت"
+
+#: products/models.py:10 products/models.py:36
+msgid "category"
+msgstr "دسته"
+
+#: products/models.py:12 products/models.py:31
+msgid "created time"
+msgstr "زمان تولید"
+
+#: products/models.py:13 products/models.py:32
+msgid "updated time"
+msgstr "زمان به روز رسانی"
+
+#: products/models.py:14
+msgid "available"
+msgstr "در دسترس"
+
+#: products/models.py:18
+msgid "product"
+msgstr "محصول"
+
+#: products/models.py:19
+msgid "products"
+msgstr "محصول ها"
+
+#: products/models.py:37
+msgid "categories"
+msgstr "دسته ها"

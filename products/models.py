@@ -27,9 +27,9 @@ class Product(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=20)
-    created_time = models.DateTimeField(auto_now_add=True)
-    updated_time = models.DateTimeField(auto_now=True)
+    name = models.CharField(_('name'), max_length=20)
+    created_time = models.DateTimeField(_('created time'), auto_now_add=True)
+    updated_time = models.DateTimeField(_('updated time'), auto_now=True)
 
     class Meta:
         db_table = 'category'
