@@ -10,13 +10,13 @@ def make_not_available(modeladmin, request, queryset):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'created_at', 'updated_at')
+    list_display = ('name', 'price', 'created_time', 'updated_time')
     list_filter = ('category', )
     search_fields = ('name', )
-    date_hierarchy = 'created_at'
+    date_hierarchy = 'created_time'
     actions = (make_not_available, )
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at', 'updated_at')
+    list_display = ('name', 'created_time', 'updated_time')
