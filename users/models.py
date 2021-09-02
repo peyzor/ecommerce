@@ -29,4 +29,4 @@ class Profile(models.Model):
         verbose_name_plural = _('profiles')
 
     def __str__(self):
-        return self.user
+        return self.user.username
