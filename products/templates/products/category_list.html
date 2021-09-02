@@ -1,3 +1,10 @@
+{% extends 'products/base.html' %}
+
+{% block title %}
+categories
+{% endblock title %}
+
+{% block body %}
 {% for category in categories %}
 <ul>
     <li>
@@ -5,3 +12,4 @@
     </li>
 </ul>
 {% endfor %}
+{% endblock body %}

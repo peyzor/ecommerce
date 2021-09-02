@@ -1,3 +1,11 @@
+{% extends 'products/base.html' %}
+
+{% block title %}
+products
+{% endblock title %}
+
+
+{% block body %}
 {% for product in products %}
 <ul>
     <li><a href="{{ product.get_absolute_url }}">
@@ -5,3 +13,4 @@
         </a></li>
 </ul>
 {% endfor %}
+{% endblock body %}

@@ -1,6 +1,16 @@
 from django.views import generic
+from django.shortcuts import render
+from django.urls import reverse
 
 from .models import Category, Product
+
+
+def home_view(request):
+    """ simple view to give access to the categories """
+    context = {
+        'category_list': reverse('products:category_list'),
+    }
+    return render(request, 'products/home.html', context)
 
 
 class CategoryListView(generic.ListView):
