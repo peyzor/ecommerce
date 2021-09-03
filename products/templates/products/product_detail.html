@@ -6,5 +6,11 @@
 
 
 {% block body %}
-<h1>{{ product }}</h1>
+<h1>name: {{ product.name }}</h1>
+<p>price: {{ product.price }}</p>
+{% if product.image %}
+<p>image: </p>
+<img src="{{ product.image.url }}" alt="">
+{% endif %}
+<p>available: {{ product.available }}</p>
 {% endblock body %}

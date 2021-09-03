@@ -1,6 +1,11 @@
 import requests
 
+from io import BytesIO
+from urllib.parse import urlparse
+from django.core import files
 from bs4 import BeautifulSoup
+
+from products.models import Product
 
 
 def crawl_product(url, page_number_limit):
@@ -43,14 +48,29 @@ def crawl_product(url, page_number_limit):
 
         all_prices = [*prices, *discount_prices]
 
-        for name, price in zip(names, all_prices):
-            data.append({
+        images = soup.select(
+            '#inspire > div > div.lg\:tw-mt-6 > div:nth-child(2) > div > div > div > main > div.tw-grid.tw-grid-cols-1.tw-mt-4.tw-gap-y-3.sm\:tw-grid-cols-2.sm\:tw-gap-3.lg\:tw-gap-4.lg\:tw-grid-cols-3.xl\:tw-grid-cols-4 > a > section > span > img'
+        )
+
+        for name, price, image in zip(names, all_prices, images):
+            data.append(({
                 'name': name.text.strip(),
-                'price': int(price.text.strip().replace(',', ''))
-            })
+                'price': int(price.text.strip().replace(',', '')),
+            }, image.attrs['src']))
 
         page_number += 1
         if page_number > page_number_limit:
             crawl = False
 
     return data
+
+
+def save_product_image(url, instance):
+    response = requests.get(url)
+    if not response.ok:
+        return
+
+    fp = BytesIO()
+    fp.write(response.content)
+    file_name = urlparse(url).path.replace('/', '-')
+    instance.image.save(file_name, files.File(fp))

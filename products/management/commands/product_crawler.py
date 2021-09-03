@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from products.utils import crawl_product
+from products.utils import crawl_product, save_product_image
 from products.models import Product, Category
 
 
@@ -42,8 +42,10 @@ class Command(BaseCommand):
             product_data = crawl_product(url, page_number_limit)
 
             category, created = Category.objects.get_or_create(name=category)
-            for product in product_data:
-                Product.objects.get_or_create(**product, category=category)
+            for product, image_src in product_data:
+                product, created = Product.objects.get_or_create(
+                    **product, category=category)
+                save_product_image(image_src, product)
 
         if category == 'all':
             for category, url in category_urls.items():

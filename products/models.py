@@ -9,6 +9,10 @@ class Product(models.Model):
     category = models.ForeignKey('Category',
                                  verbose_name=_('category'),
                                  on_delete=models.CASCADE)
+    image = models.ImageField(_('image'),
+                              upload_to='products',
+                              blank=True,
+                              null=True)
     created_time = models.DateTimeField(_('created time'), auto_now_add=True)
     updated_time = models.DateTimeField(_('updated time'), auto_now=True)
     available = models.BooleanField(_('available'), default=True)
