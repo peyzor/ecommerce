@@ -14,9 +14,12 @@
 <body>
 
     {% if user.is_authenticated %}
-    <p>your name is: {{ user.username }}</p>
+    <p>Hi {{ user.username }}</p>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
+    <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
     {% else %}
     <p>you are not logged in</p>
+    <a href="{% url 'login' %}">Log In</a>
     {% endif %}
 
     <a href="{% url 'products:home' %}">

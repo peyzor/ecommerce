@@ -153,3 +153,6 @@ cython_debug/
 
 # vscode stuff
 .vscode/
+
+# emails
+sent_emails/
