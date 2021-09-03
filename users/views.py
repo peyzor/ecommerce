@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Profile
 
@@ -49,13 +50,23 @@ class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'registration/user_password_reset_complete.html'
 
 
-class ProfileDetailView(generic.DetailView):
+class ProfileDetailView(LoginRequiredMixin, generic.DetailView):
     model = Profile
     template_name = 'users/profile_detail.html'
     context_object_name = 'profile'
 
+    def get_queryset(self, *args, **kwargs):
+        """ only the current user can see its own profile """
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(pk=self.request.user.profile.pk)
 
-class ProfileUpdateView(generic.UpdateView):
+
+class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Profile
     fields = ('age', 'photo', 'phone_number', 'bio')
     template_name = 'users/profile_update.html'
+
+    def get_queryset(self, *args, **kwargs):
+        """ only the current user can update its own profile """
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(pk=self.request.user.profile.pk)
