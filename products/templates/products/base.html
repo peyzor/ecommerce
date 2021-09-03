@@ -15,6 +15,7 @@
 
     {% if user.is_authenticated %}
     <p>Hi {{ user.username }}</p>
+    <p><a href="{% url 'profile_detail' user.profile.id %}">profile</a></p>
     <p><a href="{% url 'logout' %}">Log Out</a></p>
     <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
     {% else %}
@@ -22,9 +23,10 @@
     <a href="{% url 'login' %}">Log In</a>
     {% endif %}
 
-    <a href="{% url 'products:home' %}">
-        <h1>Home</h1>
-    </a>
+    <p><a href="{% url 'products:home' %}">
+            <h1>Home</h1>
+        </a></p>
+
     {% block body %}
     {% endblock body %}
 

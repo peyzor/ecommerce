@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 
 class Profile(models.Model):
@@ -17,17 +18,16 @@ class Profile(models.Model):
                               blank=True,
                               null=True)
     phone_number = models.PositiveBigIntegerField(
-        _('phone number'),
-        unique=True,
-        blank=True,
-        null=True,
-        validators=[phone_number_validator])
+        _('phone number'), unique=True, validators=[phone_number_validator])
     bio = models.TextField(_('bio'), max_length=300, blank=True)
 
     class Meta:
         db_table = 'profile'
         verbose_name = _('profile')
         verbose_name_plural = _('profiles')
+
+    def get_absolute_url(self):
+        return reverse('users:profile_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.user.username

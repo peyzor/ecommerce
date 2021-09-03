@@ -18,4 +18,13 @@ urlpatterns = [
     path('reset/done/',
          views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
+    path('profile-detail/<int:pk>/',
+         views.ProfileDetailView.as_view(),
+         name='profile_detail'),
+    path('profile-create/',
+         views.ProfileCreateView.as_view(),
+         name='profile_create'),
+    path('profile-update/<int:pk>/',
+         views.ProfileUpdateView.as_view(),
+         name='profile_update'),
 ]
