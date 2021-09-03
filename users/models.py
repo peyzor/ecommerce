@@ -26,8 +26,5 @@ class Profile(models.Model):
         verbose_name = _('profile')
         verbose_name_plural = _('profiles')
 
-    def get_absolute_url(self):
-        return reverse('users:profile_detail', kwargs={'pk': self.pk})
-
     def __str__(self):
         return self.user.username

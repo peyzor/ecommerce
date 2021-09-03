@@ -1,49 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% block title %}
+{{user.username}}'s profile
+{% endblock title %}
 
-<body>
-    <h1>{{ profile.user }}</h1>
+{% block body %}
+<h1>{{ profile.user }}</h1>
 
-    <p>Age: {% if profile.age %}
-    <p>{{ profile.age }}</p>
+<p>Age: {% if profile.age %}
+<p>{{ profile.age }}</p>
+{% else %}
+<p>no age</p>
+{% endif %}
+</p>
+
+<p>Photo:
+    {% if profile.photo %}
+    <img src="{{ profile.photo.url }}" alt="">
     {% else %}
-    <p>no age</p>
-    {% endif %}
-    </p>
+<p>no photo</p>
+{% endif %}
+</p>
 
-    <p>Photo:
-        {% if profile.photo %}
-        <img src="{{ profile.photo.url }}" alt="">
-        {% else %}
-    <p>no photo</p>
-    {% endif %}
-    </p>
+<p>
+    {% if profile.phone_number %}
+<p>{{profile.phone_number }}</p>
+{% else %}
+<p>no phone number</p>
+{% endif %}
+</p>
 
-    <p>
-        {% if profile.phone_number %}
-    <p>{{profile.phone_number }}</p>
+<p>
+    {% if profile.bio %}
+    <textarea name="bio" id="" cols="30" rows="10">
+    {{profile.bio }}
+</textarea>
     {% else %}
-    <p>no phone number</p>
-    {% endif %}
-    </p>
-
-    <p>
-        {% if profile.bio %}
-        <textarea name="bio" id="" cols="30" rows="10">
-        {{profile.bio }}
-    </textarea>
-        {% else %}
-    <p>no bio</p>
-    {% endif %}
-    </p>
-
-</body>
-
-</html>
+<p>no bio</p>
+{% endif %}
+</p>
+{% endblock body %}

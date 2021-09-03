@@ -1,27 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% block title %}
+register
+{% endblock title %}
 
-<body>
-    <h1>Registration Page</h1>
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
+{% block body %}
+<h1>Registration Page</h1>
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
 
-        {% if form.errors %}
-        <p>there are errors in the form</p>
-        {% endif %}
+    {% if form.errors %}
+    <p>there are errors in the form</p>
+    {% endif %}
 
-        {{ form }}
+    {{ form }}
 
-        <input type="submit" value="register">
+    <input type="submit" value="register">
 
-    </form>
-</body>
-
-</html>
+</form>
+{% endblock body %}

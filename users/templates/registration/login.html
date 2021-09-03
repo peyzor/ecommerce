@@ -1,41 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% block title %}
+login
+{% endblock title %}
 
-<body>
+{% block body %}
 
-    {% if form.errors %}
-    <p>something is wrong with what you entered!</p>
-    {% endif %}
+{% if form.errors %}
+<p>something is wrong with what you entered!</p>
+{% endif %}
 
-    {% if next %}
-    <p>you can't access that page</p>
-    {% endif %}
+{% if next %}
+<p>you can't access that page</p>
+{% endif %}
 
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
 
-        <p>Username: {{ form.username }}</p>
-        <p>password: {{ form.password }}</p>
+    <p>Username: {{ form.username }}</p>
+    <p>password: {{ form.password }}</p>
 
-        <input type="submit" value="login">
-        <input type="hidden" name="next" value="{{ next }}">
-    </form>
-    <br>
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+<br>
 
-    <p>if you don't have an account already register using the link below</p>
-    <a href="{% url 'register' %}">register</a>
-    <br>
+<p>if you don't have an account already register using the link below</p>
+<a href="{% url 'register' %}">register</a>
+<br>
 
-    <p>if you forgot your password use the link below</p>
-    <a href="{% url 'password_reset' %}">Lost password?</a>
-
-</body>
-
-</html>
+<p>if you forgot your password use the link below</p>
+<a href="{% url 'password_reset' %}">Lost password?</a>
+{% endblock body %}
