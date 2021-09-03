@@ -39,4 +39,6 @@
 <p>no bio</p>
 {% endif %}
 </p>
+
+<p><a href="{% url 'profile_update' user.profile.id %}">edit</a></p>
 {% endblock body %}

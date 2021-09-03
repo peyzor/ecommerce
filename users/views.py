@@ -1,9 +1,8 @@
-from django.shortcuts import redirect, render
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import views as auth_views
 from django.views import generic
-from django.urls import reverse_lazy
+from django.shortcuts import redirect, render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import views as auth_views
 
 from .models import Profile
 
@@ -54,18 +53,6 @@ class ProfileDetailView(generic.DetailView):
     model = Profile
     template_name = 'users/profile_detail.html'
     context_object_name = 'profile'
-
-
-class ProfileCreateView(generic.CreateView):
-    model = Profile
-    fields = ('age', 'photo', 'phone_number', 'bio')
-    template_name = 'users/profile_create.html'
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.user = self.request.user
-        obj.save()
-        return super().form_valid(form)
 
 
 class ProfileUpdateView(generic.UpdateView):

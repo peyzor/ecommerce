@@ -15,7 +15,10 @@
 
     {% if user.is_authenticated %}
     <p>Hi {{ user.username }}</p>
+
+    {% if user.profile.id %}
     <p><a href="{% url 'profile_detail' user.profile.id %}">profile</a></p>
+    {% endif %}
     <p><a href="{% url 'logout' %}">Log Out</a></p>
     <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
     {% else %}
