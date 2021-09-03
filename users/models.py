@@ -5,6 +5,9 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Profile(models.Model):
+    phone_number_validator = RegexValidator(r'^(\+98|0)?9\d{9}$',
+                                            message=_('wrong number'))
+
     user = models.OneToOneField(User,
                                 verbose_name=_('user'),
                                 on_delete=models.CASCADE)
@@ -18,9 +21,7 @@ class Profile(models.Model):
         unique=True,
         blank=True,
         null=True,
-        validators=[
-            RegexValidator(r'^(\+98|0)?9\d{9}$', message=_('wrong number'))
-        ])
+        validators=[phone_number_validator])
     bio = models.TextField(_('bio'), max_length=300, blank=True)
 
     class Meta:

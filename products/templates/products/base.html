@@ -12,6 +12,13 @@
 </head>
 
 <body>
+
+    {% if user.is_authenticated %}
+    <p>your name is: {{ user.username }}</p>
+    {% else %}
+    <p>you are not logged in</p>
+    {% endif %}
+
     <a href="{% url 'products:home' %}">
         <h1>Home</h1>
     </a>
