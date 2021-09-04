@@ -12,7 +12,7 @@ class Cart(models.Model):
                              on_delete=models.CASCADE)
     entries = models.ManyToManyField(
         'Entry',
-        verbose_name=_('products'),
+        verbose_name=_('entries'),
     )
     total_price = models.PositiveIntegerField(
         _('total price'),
