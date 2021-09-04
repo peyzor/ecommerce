@@ -13,4 +13,7 @@
 <img src="{{ product.image.url }}" alt="">
 {% endif %}
 <p>available: {{ product.available }}</p>
+
+<p><a href="{% url 'carts:add_to_cart' product.id %}">add to cart</a></p>
+
 {% endblock body %}

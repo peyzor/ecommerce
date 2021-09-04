@@ -39,7 +39,7 @@ class Entry(models.Model):
     product = models.ForeignKey(Product,
                                 verbose_name=_('entry'),
                                 on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(_('quantity'))
+    quantity = models.PositiveIntegerField(_('quantity'), default=0)
     price = models.PositiveIntegerField(_('price'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
