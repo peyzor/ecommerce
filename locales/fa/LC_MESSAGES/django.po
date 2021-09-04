@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 15:15+0430\n"
+"POT-Creation-Date: 2021-09-04 18:40+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,38 +18,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: products/models.py:7 products/models.py:30
-msgid "name"
-msgstr "اسم"
+#: carts/models.py:11 users/models.py:15
+msgid "user"
+msgstr "کاربر"
 
-#: products/models.py:8
-msgid "price"
+#: carts/models.py:15 carts/models.py:52
+msgid "entries"
+msgstr "ورودی ها"
+
+#: carts/models.py:18
+#, fuzzy
+#| msgid "price"
+msgid "total price"
 msgstr "قیمت"
 
-#: products/models.py:10 products/models.py:36
-msgid "category"
-msgstr "دسته"
-
-#: products/models.py:12 products/models.py:31
+#: carts/models.py:22 products/models.py:16 products/models.py:35
 msgid "created time"
 msgstr "زمان تولید"
 
-#: products/models.py:13 products/models.py:32
+#: carts/models.py:23 products/models.py:17 products/models.py:36
 msgid "updated time"
 msgstr "زمان به روز رسانی"
 
-#: products/models.py:14
+#: carts/models.py:24 products/models.py:18
 msgid "available"
 msgstr "در دسترس"
 
-#: products/models.py:18
+#: carts/models.py:28
+msgid "cart"
+msgstr "سبد"
+
+#: carts/models.py:29
+msgid "carts"
+msgstr "سبد ها"
+
+#: carts/models.py:40 carts/models.py:51
+msgid "entry"
+msgstr "ورودی"
+
+#: carts/models.py:42
+msgid "quantity"
+msgstr "تعداد"
+
+#: carts/models.py:43 products/models.py:8
+msgid "price"
+msgstr "قیمت"
+
+#: products/models.py:7 products/models.py:34
+msgid "name"
+msgstr "اسم"
+
+#: products/models.py:10 products/models.py:40
+msgid "category"
+msgstr "دسته"
+
+#: products/models.py:12
+msgid "image"
+msgstr "عکس"
+
+#: products/models.py:22
 msgid "product"
 msgstr "محصول"
 
-#: products/models.py:19
+#: products/models.py:23
 msgid "products"
 msgstr "محصول ها"
 
-#: products/models.py:37
+#: products/models.py:41
 msgid "categories"
 msgstr "دسته ها"
+
+#: users/models.py:12
+msgid "wrong number"
+msgstr "شماره اشتباه"
+
+#: users/models.py:17
+msgid "age"
+msgstr "سن"
+
+#: users/models.py:18
+msgid "photo"
+msgstr "عکس"
+
+#: users/models.py:23
+msgid "phone number"
+msgstr "شماره تلفن"
+
+#: users/models.py:28
+msgid "bio"
+msgstr "بیو"
+
+#: users/models.py:32
+msgid "profile"
+msgstr "پروفایل"
+
+#: users/models.py:33
+msgid "profiles"
+msgstr "پروفایل ها"
