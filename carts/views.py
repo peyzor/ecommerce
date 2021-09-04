@@ -1,13 +1,14 @@
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F
 
 from .models import Cart, Entry
 from products.models import Product
 
 
-class CartDetailView(generic.DetailView):
+class CartDetailView(LoginRequiredMixin, generic.DetailView):
     model = Cart
     template_name = 'carts/cart_detail.html'
     context_object_name = 'cart'
