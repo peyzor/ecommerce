@@ -21,6 +21,9 @@ urlpatterns = [
     path('api/products/<int:pk>/',
          views.ProductDetailAPIView.as_view(),
          name='product_detail_api'),
+    path('api/categories/',
+         views.CategoryListAPIView.as_view(),
+         name='category_list_api'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

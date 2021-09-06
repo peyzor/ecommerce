@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from rest_framework import generics
 
-from products.serializers import ProductSerializer
+from products.serializers import ProductSerializer, CategorySerializer
 from .models import Category, Product
 
 
@@ -13,9 +13,14 @@ class ProductListAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
 
 
-class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class CategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 def home_view(request):
