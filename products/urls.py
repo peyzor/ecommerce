@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
 
@@ -14,8 +15,12 @@ urlpatterns = [
     path('product-detail/<int:product_id>/',
          views.ProductDetailView.as_view(),
          name='product_detail'),
-    path('api/products/', views.product_list_view, name='product_list_api'),
+    path('api/products/',
+         views.ProductListAPIView.as_view(),
+         name='product_list_api'),
     path('api/products/<int:pk>/',
-         views.product_detail_view,
+         views.ProductDetailAPIView.as_view(),
          name='product_detail_api'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
