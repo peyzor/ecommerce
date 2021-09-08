@@ -11,16 +11,15 @@ class RootView(APIView):
     def get(self, request, format=None):
         return Response({
             'categories':
-            reverse('products:category_list', request=request, format=format)
+            reverse('products:category_list', request=request, format=format),
+            'products':
+            reverse('products:product_list', request=request, format=format),
         })
 
 
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
-    def get_queryset(self):
-        return Product.objects.filter(category__name=self.kwargs['category'])
 
 
 class ProductDetailView(generics.RetrieveAPIView):
