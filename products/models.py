@@ -8,6 +8,7 @@ class Product(models.Model):
     price = models.PositiveIntegerField(_('price'))
     category = models.ForeignKey('Category',
                                  verbose_name=_('category'),
+                                 related_name='products',
                                  on_delete=models.CASCADE)
     image = models.ImageField(_('image'),
                               upload_to='products',

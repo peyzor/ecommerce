@@ -1,21 +1,24 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from .models import Product, Category
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(slug_field='name', read_only=True)
+
     class Meta:
         model = Product
         fields = [
             'id', 'name', 'price', 'category', 'image', 'created_time',
-            'updated_time'
+            'updated_time', 'detail'
         ]
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='products:category_detail_api')
-    product_set = serializers.HyperlinkedRelatedField(
+    products = serializers.HyperlinkedRelatedField(
         view_name='products:product_detail_api',
         lookup_field='pk',
         many=True,
@@ -23,4 +26,4 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['url', 'id', 'name', 'product_set']
+        fields = ['url', 'id', 'name', 'products']
