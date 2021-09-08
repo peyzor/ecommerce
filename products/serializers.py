@@ -17,10 +17,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='products:category_detail')
+        view_name='products:category_detail', lookup_url_kwarg='category_id')
     products = serializers.HyperlinkedRelatedField(
         view_name='products:product_detail',
-        lookup_field='pk',
+        lookup_url_kwarg='product_id',
         many=True,
         read_only=True)
 
