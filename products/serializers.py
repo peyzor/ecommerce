@@ -23,7 +23,7 @@ class ProductHyperlinkedRelatedField(serializers.HyperlinkedRelatedField):
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    url = ProductHyperlinkedRelatedField(read_only=True)
+    url = ProductHyperlinkedRelatedField(source='*', read_only=True)
     category = serializers.SlugRelatedField(slug_field='name', read_only=True)
 
     class Meta:
