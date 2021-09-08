@@ -21,7 +21,7 @@ class RootAPIView(APIView):
         })
 
 
-class ProductListAPIView(generics.ListCreateAPIView):
+class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -32,6 +32,11 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 
 
 class CategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class CategoryDetailAPIView(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 

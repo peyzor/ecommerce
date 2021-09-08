@@ -16,15 +16,18 @@ urlpatterns = [
          views.ProductDetailView.as_view(),
          name='product_detail'),
     path('api/', views.RootAPIView.as_view(), name='root_api'),
+    path('api/categories/',
+         views.CategoryListAPIView.as_view(),
+         name='category_list_api'),
+    path('api/categories/<int:pk>/',
+         views.CategoryDetailAPIView.as_view(),
+         name='category_detail_api'),
     path('api/products/',
          views.ProductListAPIView.as_view(),
          name='product_list_api'),
     path('api/products/<int:pk>/',
          views.ProductDetailAPIView.as_view(),
          name='product_detail_api'),
-    path('api/categories/',
-         views.CategoryListAPIView.as_view(),
-         name='category_list_api'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

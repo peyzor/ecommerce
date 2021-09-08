@@ -12,7 +12,15 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='products:category_detail_api')
+    product_set = serializers.HyperlinkedRelatedField(
+        view_name='products:product_detail_api',
+        lookup_field='pk',
+        many=True,
+        read_only=True)
+
     class Meta:
         model = Category
-        fields = ['id', 'name', 'created_time', 'updated_time']
+        fields = ['url', 'id', 'name', 'product_set']
