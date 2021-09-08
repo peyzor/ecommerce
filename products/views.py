@@ -1,11 +1,24 @@
 from django.views import generic
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse as dj_reverse
 
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from products.serializers import ProductSerializer, CategorySerializer
 from .models import Category, Product
+
+
+class RootAPIView(APIView):
+    def get(self, request, format=None):
+        return Response({
+            'categories':
+            reverse('products:category_list_api',
+                    request=request,
+                    format=format)
+        })
 
 
 class ProductListAPIView(generics.ListCreateAPIView):
@@ -26,7 +39,7 @@ class CategoryListAPIView(generics.ListAPIView):
 def home_view(request):
     """ simple view to give access to the categories """
     context = {
-        'category_list': reverse('products:category_list'),
+        'category_list': dj_reverse('products:category_list'),
     }
     return render(request, 'products/home.html', context)
 
