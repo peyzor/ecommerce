@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'carts.apps.CartsConfig',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 # Rest Framework config
