@@ -1,53 +1,49 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
-from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
-class Profile(models.Model):
-    phone_number_validator = RegexValidator(r'^(\+98|0)?9\d{9}$',
-                                            message=_('wrong number'))
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, password=None):
+        if username is None:
+            raise TypeError('Users should have a username')
 
-    user = models.OneToOneField(User,
-                                verbose_name=_('user'),
-                                on_delete=models.CASCADE)
-    age = models.PositiveSmallIntegerField(_('age'), blank=True, null=True)
-    photo = models.ImageField(_('photo'),
-                              upload_to='users',
-                              blank=True,
-                              null=True)
-    phone_number = models.PositiveBigIntegerField(
-        _('phone number'),
-        unique=True,
-        blank=True,
-        null=True,
-        validators=[phone_number_validator])
-    bio = models.TextField(_('bio'), max_length=300, blank=True)
+        if email is None:
+            raise TypeError('Users should have an Email')
 
-    class Meta:
-        db_table = 'profile'
-        verbose_name = _('profile')
-        verbose_name_plural = _('profiles')
+        user = self.model(username=username, email=self.normalize_email(email))
+        user.set_password(password)
+        user.save()
+        return user
 
-    def get_absolute_url(self):
-        return reverse('profile_detail', kwargs={'pk': self.pk})
+    def create_superuser(self, username, email, password=None):
+        if password is None:
+            raise TypeError('Password should not be None')
+
+        user = self.create_user(username, email, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=255, unique=True, db_index=True)
+    email = models.EmailField(max_length=255, unique=True, db_index=True)
+    is_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    created_time = models.DateTimeField(auto_now_add=True)
+    updated_time = models.DateTimeField(auto_now=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    objects = UserManager()
 
     def __str__(self):
-        return self.user.username
+        return self.email
 
-
-# signals to create profile after a user is created
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {'refresh': str(refresh), 'access': str(refresh.access_token)}
