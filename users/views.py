@@ -3,12 +3,12 @@ import jwt
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import DjangoUnicodeDecodeError, smart_str
 from django.utils.http import urlsafe_base64_decode
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.conf import settings
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import RegisterSerializer, EmailVerificationSerializer, LoginSerializer, PasswordResetSerializer, SetNewPasswordSerializer
 from .models import User
@@ -22,9 +22,8 @@ class RegisterView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user_data = serializer.data
 
-        user = User.objects.get(email=user_data['email'])
+        user = User.objects.get(email=serializer.data['email'])
         token = RefreshToken.for_user(user).access_token
 
         current_site = get_current_site(request).domain
@@ -40,7 +39,12 @@ class RegisterView(generics.GenericAPIView):
 
         Util.send_email(email_data)
 
-        return Response(user_data, status=status.HTTP_201_CREATED)
+        return Response(
+            {
+                'success':
+                'User created, you can now activate your account using the email we sent you'
+            },
+            status=status.HTTP_201_CREATED)
 
 
 class EmailVerifyView(generics.GenericAPIView):
@@ -58,7 +62,7 @@ class EmailVerifyView(generics.GenericAPIView):
                 user.is_verified = True
                 user.save()
 
-            return Response({'email': "Successfully activated"},
+            return Response({'success': "Successfully activated"},
                             status=status.HTTP_200_OK)
 
         except jwt.ExpiredSignatureError:

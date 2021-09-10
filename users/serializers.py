@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import force_str, smart_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.encoding import force_str, smart_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -21,13 +21,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'username', 'password']
 
     def validate(self, attrs):
-        email = attrs.get('email', '')
         username = attrs.get('username', '')
 
         if not username.isalnum():
             raise serializers.ValidationError(
                 'The username should only contain alphanumeric characters')
-        return attrs
+        return super().validate(attrs)
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
