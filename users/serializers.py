@@ -48,13 +48,15 @@ class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255,
                                      min_length=4,
                                      read_only=True)
-    tokens = serializers.CharField(max_length=400,
-                                   min_length=4,
-                                   read_only=True)
+    tokens = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['email', 'password', 'username', 'tokens']
+
+    def get_tokens(self, obj):
+        user = User.objects.get(email=obj.get('email'))
+        return user.tokens()
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -70,9 +72,6 @@ class LoginSerializer(serializers.ModelSerializer):
 
         if not user.is_verified:
             raise AuthenticationFailed('Email is not verified')
-
-        attrs['tokens'] = user.tokens()
-        attrs['username'] = user.username
 
         return attrs
 
