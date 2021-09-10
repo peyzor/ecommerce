@@ -18,6 +18,7 @@ from .utils import Util
 
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
+    permission_classes = (permissions.AllowAny, )
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -50,6 +51,7 @@ class RegisterView(generics.GenericAPIView):
 
 class EmailVerifyView(generics.GenericAPIView):
     serializer_class = EmailVerificationSerializer
+    permission_classes = (permissions.AllowAny, )
 
     def get(self, request):
         token = request.query_params.get('token')
@@ -77,6 +79,7 @@ class EmailVerifyView(generics.GenericAPIView):
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    permission_classes = (permissions.AllowAny, )
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
