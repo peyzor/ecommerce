@@ -6,6 +6,7 @@ from django.utils.encoding import force_str, smart_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from .models import User
 from .utils import Util
@@ -26,7 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         if not username.isalnum():
             raise serializers.ValidationError(
                 'The username should only contain alphanumeric characters')
-        return super().validate(attrs)
+        return attrs
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -140,3 +141,18 @@ class SetNewPasswordSerializer(serializers.Serializer):
             raise AuthenticationFailed('The reset link is invalid', 401)
 
         return attrs
+
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField(min_length=1)
+
+    def validate(self, attrs):
+        self.token = attrs.get('refresh')
+
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            RefreshToken(self.token).blacklist()
+        except TokenError:
+            self.fail('bad token')
