@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.translation import gettext_lazy as _
 from django.utils.encoding import force_str, smart_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
@@ -26,7 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if not username.isalnum():
             raise serializers.ValidationError(
-                'The username should only contain alphanumeric characters')
+                _('The username should only contain alphanumeric characters'))
         return attrs
 
     def create(self, validated_data):
@@ -75,13 +76,13 @@ class LoginSerializer(serializers.ModelSerializer):
         user = authenticate(email=email, phone=phone, password=password)
 
         if not user:
-            raise AuthenticationFailed('Invalid credentials, try again')
+            raise AuthenticationFailed(_('Invalid credentials, try again'))
 
         if not user.is_active:
-            raise AuthenticationFailed('Account disabled')
+            raise AuthenticationFailed(_('Account disabled'))
 
         if not user.is_verified:
-            raise AuthenticationFailed('Email is not verified')
+            raise AuthenticationFailed(_('Email is not verified'))
 
         return attrs
 
@@ -102,7 +103,7 @@ class PasswordResetSerializer(serializers.Serializer):
             token = PasswordResetTokenGenerator().make_token(user)
 
             current_site = get_current_site(self.context.get('request')).domain
-            relative_link = reverse('password_reset_confirm',
+            relative_link = reverse('users:password_reset_confirm',
                                     kwargs={
                                         'uidb64': uidb64,
                                         'token': token
@@ -141,13 +142,13 @@ class SetNewPasswordSerializer(serializers.Serializer):
             user = User.objects.get(id=user_id)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
-                raise AuthenticationFailed('The reset link is invalid', 401)
+                raise AuthenticationFailed(_('The reset link is invalid'), 401)
 
             user.set_password(password)
             user.save()
 
         except Exception:
-            raise AuthenticationFailed('The reset link is invalid', 401)
+            raise AuthenticationFailed(_('The reset link is invalid'), 401)
 
         return attrs
 
