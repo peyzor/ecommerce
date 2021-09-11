@@ -7,6 +7,7 @@ from django.utils.encoding import force_str, smart_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from django.db.models import Q
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from .models import User
@@ -61,12 +62,24 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ['email', 'phone', 'password', 'username', 'tokens']
 
     def get_tokens(self, obj):
-        user = User.objects.get(email=obj.get('email'))
-        return user.tokens()
+        email = obj.get('email')
+        phone = obj.get('phone')
+        try:
+            user = User.objects.get(Q(email=email) | Q(phone=phone))
+            return user.tokens()
+
+        except User.DoesNotExist:
+            return None
 
     def get_username(self, obj):
-        user = User.objects.get(email=obj.get('email'))
-        return user.username
+        email = obj.get('email')
+        phone = obj.get('phone')
+        try:
+            user = User.objects.get(Q(email=email) | Q(phone=phone))
+            return user.username
+
+        except User.DoesNotExist:
+            return None
 
     def validate(self, attrs):
         email = attrs.get('email')
