@@ -1,4 +1,5 @@
 import humanize
+
 from django.contrib import admin
 
 from .models import Cart, Entry

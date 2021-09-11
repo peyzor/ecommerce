@@ -6,8 +6,8 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 
 from .models import Cart, Entry
-from products.models import Product
 from .serializers import CartSerializer, EntrySerializer
+from products.models import Product
 
 
 class CartDetailView(generics.RetrieveAPIView):

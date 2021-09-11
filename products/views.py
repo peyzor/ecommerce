@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -14,6 +14,8 @@ class RootView(APIView):
             reverse('products:category_list', request=request, format=format),
             'products':
             reverse('products:product_list', request=request, format=format),
+            'entries':
+            reverse('carts:entry_list', request=request, format=format),
         })
 
 

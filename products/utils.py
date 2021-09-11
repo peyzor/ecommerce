@@ -2,8 +2,9 @@ import requests
 
 from io import BytesIO
 from urllib.parse import urlparse
-from django.core import files
 from bs4 import BeautifulSoup
+
+from django.core import files
 
 from products.models import Product
 
