@@ -188,12 +188,6 @@ class PhoneTokenCreateSerializer(serializers.ModelSerializer):
         fields = ['pk', 'phone']
 
 
-class PhoneTokenUser(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
-
 class PhoneTokenValidateSerializer(serializers.ModelSerializer):
     otp = serializers.CharField(max_length=40)
 

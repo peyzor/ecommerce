@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import datetime
 import hashlib
 import os
@@ -74,27 +72,27 @@ class User(AbstractBaseUser, PermissionsMixin):
         return tokens_data
 
     class Meta:
-        # Add db table later
-        # db_table = 'user'
+        db_table = 'user'
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
 
 class PhoneToken(models.Model):
-    phone = PhoneNumberField(editable=False)
-    otp = models.CharField(max_length=40, editable=False)
-    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
-    attempts = models.IntegerField(default=0)
-    used = models.BooleanField(default=False)
+    phone = PhoneNumberField(_('phone'), editable=False)
+    otp = models.CharField(_('otp'), max_length=40, editable=False)
+    timestamp = models.DateTimeField(_('timestamp'),
+                                     auto_now_add=True,
+                                     editable=False)
+    attempts = models.IntegerField(_('attempts'), default=0)
+    used = models.BooleanField(_('used'), default=False)
 
     class Meta:
-        # Add db table later
-        # db_table = 'phone_token'
-        verbose_name = _("OTP Token")
-        verbose_name_plural = _("OTP Tokens")
+        db_table = 'phone_token'
+        verbose_name = _("otp token")
+        verbose_name_plural = _("otp tokens")
 
     def __str__(self):
-        return f'{self.phone} - {self.otp}'
+        return f'{self.phone}, {self.otp}'
 
     @classmethod
     def create_otp_for_number(cls, number):
@@ -106,6 +104,7 @@ class PhoneToken(models.Model):
                                               datetime.time.max)
         otps = cls.objects.filter(phone=number,
                                   timestamp__range=(today_min, today_max))
+
         if otps.count() <= getattr(settings, 'PHONE_LOGIN_ATTEMPTS', 10):
             otp = cls.generate_otp(
                 length=getattr(settings, 'PHONE_LOGIN_OTP_LENGTH', 6))
