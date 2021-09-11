@@ -1,2 +1,2 @@
-{{ otp }} is one time password for login to Mula.
-Ref ID: {{id}}
+Code: {{ otp }} is your one time password for login
+Ref ID: {{ id }}
