@@ -11,7 +11,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
-from .models import User
+from .models import User, PhoneToken
 from .utils import Util
 
 
@@ -180,3 +180,23 @@ class LogoutSerializer(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail('bad token')
+
+
+class PhoneTokenCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneToken
+        fields = ['pk', 'phone']
+
+
+class PhoneTokenUser(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
+class PhoneTokenValidateSerializer(serializers.ModelSerializer):
+    otp = serializers.CharField(max_length=40)
+
+    class Meta:
+        model = PhoneToken
+        fields = ['pk', 'otp']

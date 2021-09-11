@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from .models import User
+from .models import User, PhoneToken
 
 
 @admin.action(description='Make selected users not active')
@@ -82,5 +82,13 @@ class UserAdmin(BaseUserAdmin):
     actions = (make_users_not_active, make_users_verified)
 
 
+class PhoneTokenAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'otp', 'timestamp', 'attempts', 'used')
+    search_fields = ('phone', )
+    list_filter = ('timestamp', 'attempts', 'used')
+    readonly_fields = ('phone', 'otp', 'timestamp', 'attempts')
+
+
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
+admin.site.register(PhoneToken, PhoneTokenAdmin)

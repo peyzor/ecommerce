@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING:340656 don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
 AUTHENTICATION_BACKENDS = (
     'users.backends.EmailPhoneBackend',
+    'users.backends.Phone2FABackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -46,12 +47,14 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-    # 'DEFAULT_PERMISSION_CLASSES':
-    # ('rest_framework.permissions.IsAuthenticated', ),
-    # 'DEFAULT_AUTHENTICATION_CLASSES':
-    # ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
-    'NON_FIELD_ERRORS_KEY': 'error',
+    'PAGE_SIZE':
+    10,
+    'DEFAULT_PERMISSION_CLASSES':
+    ('rest_framework.permissions.IsAuthenticated', ),
+    'DEFAULT_AUTHENTICATION_CLASSES':
+    ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
+    'NON_FIELD_ERRORS_KEY':
+    'error',
 }
 
 # Simple JWT settings
@@ -167,3 +170,9 @@ EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+# SMS
+
+SENDSMS_BACKEND = 'sendsms.backends.console.SmsBackend'
+SENDSMS_FROM_NUMBER = config('SENDSMS_FROM_NUMBER')
+PHONE_LOGIN_DEBUG = True

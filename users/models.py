@@ -1,10 +1,19 @@
+from __future__ import unicode_literals
+
+import datetime
+import hashlib
+import os
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.template.loader import render_to_string
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from phonenumber_field.modelfields import PhoneNumberField
+from sendsms.message import SmsMessage
 
 
 class UserManager(BaseUserManager):
@@ -69,3 +78,57 @@ class User(AbstractBaseUser, PermissionsMixin):
         # db_table = 'user'
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+
+class PhoneToken(models.Model):
+    phone = PhoneNumberField(editable=False)
+    otp = models.CharField(max_length=40, editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+    attempts = models.IntegerField(default=0)
+    used = models.BooleanField(default=False)
+
+    class Meta:
+        # Add db table later
+        # db_table = 'phone_token'
+        verbose_name = _("OTP Token")
+        verbose_name_plural = _("OTP Tokens")
+
+    def __str__(self):
+        return f'{self.phone} - {self.otp}'
+
+    @classmethod
+    def create_otp_for_number(cls, number):
+        # The max otps generated for a number in a day are only 10.
+        # Any more than 10 attempts returns False for the day.
+        today_min = datetime.datetime.combine(datetime.date.today(),
+                                              datetime.time.min)
+        today_max = datetime.datetime.combine(datetime.date.today(),
+                                              datetime.time.max)
+        otps = cls.objects.filter(phone=number,
+                                  timestamp__range=(today_min, today_max))
+        if otps.count() <= getattr(settings, 'PHONE_LOGIN_ATTEMPTS', 10):
+            otp = cls.generate_otp(
+                length=getattr(settings, 'PHONE_LOGIN_OTP_LENGTH', 6))
+            phone_token = PhoneToken(phone=number, otp=otp)
+            phone_token.save()
+            from_phone = getattr(settings, 'SENDSMS_FROM_NUMBER')
+            message = SmsMessage(body=render_to_string("users/otp_sms.txt", {
+                "otp": otp,
+                "id": phone_token.id
+            }),
+                                 from_phone=from_phone,
+                                 to=[number])
+            message.send()
+            return phone_token
+        else:
+            return False
+
+    @classmethod
+    def generate_otp(cls, length=6):
+        hash_algorithm = getattr(settings, 'PHONE_LOGIN_OTP_HASH_ALGORITHM',
+                                 'sha256')
+        m = getattr(hashlib, hash_algorithm)()
+        m.update(getattr(settings, 'SECRET_KEY', None).encode('utf-8'))
+        m.update(os.urandom(16))
+        otp = str(int(m.hexdigest(), 16))[-length:]
+        return otp
