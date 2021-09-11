@@ -33,7 +33,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'phonenumbers',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'users.backends.EmailPhoneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Rest Framework settings
 

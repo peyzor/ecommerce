@@ -42,16 +42,22 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(max_length=255, min_length=4)
+    email = serializers.EmailField(max_length=255,
+                                   min_length=4,
+                                   required=False)
     password = serializers.CharField(max_length=60,
                                      min_length=6,
                                      write_only=True)
+    phone = serializers.CharField(allow_blank=True,
+                                  allow_null=True,
+                                  max_length=128,
+                                  required=False)
     username = serializers.SerializerMethodField()
     tokens = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'username', 'tokens']
+        fields = ['email', 'phone', 'password', 'username', 'tokens']
 
     def get_tokens(self, obj):
         user = User.objects.get(email=obj.get('email'))
@@ -62,10 +68,11 @@ class LoginSerializer(serializers.ModelSerializer):
         return user.username
 
     def validate(self, attrs):
-        email = attrs.get('email', '')
-        password = attrs.get('password', '')
+        email = attrs.get('email')
+        password = attrs.get('password')
+        phone = attrs.get('phone')
 
-        user = authenticate(email=email, password=password)
+        user = authenticate(email=email, phone=phone, password=password)
 
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')
