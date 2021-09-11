@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from .models import Cart, Entry
 from products.models import Product
-from .serializers import CartSerializer
+from .serializers import CartSerializer, EntrySerializer
 
 
 class CartDetailView(generics.RetrieveAPIView):
@@ -18,6 +18,19 @@ class CartDetailView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
+
+class EntryListView(generics.ListAPIView):
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
+    permission_classes = (permissions.IsAuthenticated, )
+
+
+class EntryDetailView(generics.RetrieveAPIView):
+    queryset = Entry.objects.all()
+    serializer_class = EntrySerializer
+    lookup_url_kwarg = 'entry_id'
+    permission_classes = (permissions.IsAuthenticated, )
 
 
 class AddToCartView(APIView):
