@@ -6,12 +6,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
-from django.template.loader import render_to_string
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from phonenumber_field.modelfields import PhoneNumberField
-from sendsms.message import SmsMessage
+from kavenegar import KavenegarAPI, APIException, HTTPException
 
 
 class UserManager(BaseUserManager):
@@ -102,25 +101,35 @@ class PhoneToken(models.Model):
                                               datetime.time.min)
         today_max = datetime.datetime.combine(datetime.date.today(),
                                               datetime.time.max)
+
         otps = cls.objects.filter(phone=number,
                                   timestamp__range=(today_min, today_max))
 
-        if otps.count() <= getattr(settings, 'PHONE_LOGIN_ATTEMPTS', 10):
+        if otps.count() <= getattr(settings, 'PHONE_LOGIN_ATTEMPTS', 30):
             otp = cls.generate_otp(
                 length=getattr(settings, 'PHONE_LOGIN_OTP_LENGTH', 6))
+
             phone_token = PhoneToken(phone=number, otp=otp)
             phone_token.save()
-            from_phone = getattr(settings, 'SENDSMS_FROM_NUMBER')
-            message = SmsMessage(body=render_to_string("users/otp_sms.txt", {
-                "otp": otp,
-                "id": phone_token.id
-            }),
-                                 from_phone=from_phone,
-                                 to=[number])
-            message.send()
-            return phone_token
-        else:
-            return False
+
+            api_key = settings.API_KEY
+            try:
+                api = KavenegarAPI(api_key)
+                params = {
+                    'sender': '10004346',
+                    'receptor': number,
+                    'message': f'Your code: {otp}'
+                }
+                api.sms_send(params)
+                return phone_token
+
+            except APIException:
+                return None
+
+            except HTTPException:
+                return None
+
+        return None
 
     @classmethod
     def generate_otp(cls, length=6):

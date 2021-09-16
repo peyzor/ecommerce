@@ -47,12 +47,14 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-    # 'DEFAULT_PERMISSION_CLASSES':
-    # ('rest_framework.permissions.IsAuthenticated', ),
-    # 'DEFAULT_AUTHENTICATION_CLASSES':
-    # ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
-    'NON_FIELD_ERRORS_KEY': 'error',
+    'PAGE_SIZE':
+    10,
+    'DEFAULT_PERMISSION_CLASSES':
+    ('rest_framework.permissions.IsAuthenticated', ),
+    'DEFAULT_AUTHENTICATION_CLASSES':
+    ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
+    'NON_FIELD_ERRORS_KEY':
+    'error',
 }
 
 # Simple JWT settings
@@ -171,6 +173,5 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # SMS
 
-SENDSMS_BACKEND = 'sendsms.backends.console.SmsBackend'
-SENDSMS_FROM_NUMBER = config('SENDSMS_FROM_NUMBER')
-PHONE_LOGIN_DEBUG = True
+PHONE_LOGIN_DEBUG = config('PHONE_LOGIN_DEBUG')
+API_KEY = config('API_KEY')
