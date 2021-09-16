@@ -160,13 +160,17 @@ class GenerateOTP(generics.CreateAPIView):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         if serializer.is_valid():
-            token = PhoneToken.create_otp_for_number(request.data.get('phone'))
+            token = PhoneToken.create_otp_for_number(
+                number=request.data.get('phone'))
+
             if token:
                 phone_token = self.serializer_class(
                     token, context={'request': request})
                 data = phone_token.data
+
                 if getattr(settings, 'PHONE_LOGIN_DEBUG', False):
-                    data['debug'] = token.otp
+                    data['debug_mode_token'] = token.otp
+
                 return Response(data)
             return Response(
                 {
